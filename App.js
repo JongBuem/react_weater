@@ -20,14 +20,13 @@ export default class extends React.Component {
       isLoading:false, 
       temp: data.main.temp,
       condition: data.weather[0].main});
-  };
+    };
 
   getLocation = async()=>{
     try{
       await Location.requestPermissionsAsync();
       const {coords: {latitude, longitude}} = await Location.getCurrentPositionAsync();
       this.getWeather(latitude, longitude);
-      this.setState({ isLoading: false});
     } catch(error){
       Alert.alert("can't find you.", "so sad");
     }
