@@ -4,6 +4,7 @@ import PropTypes from "prop-types";
 import { MaterialCommunityIcons } from '@expo/vector-icons';
 import { LinearGradient } from 'expo-linear-gradient';
 
+//현재 날씨의 따른 아이콘, 이름, 배경색을 제공한다
 const WeatherOptions = {
     Thunderstorm:{
         iconName : "weather-lightning-rainy",
@@ -87,10 +88,11 @@ const WeatherOptions = {
     },
 }
 
-export default function Weather({temp, condition, city, speed, humidity, pressure}){
-    let icon = WeatherOptions[condition].iconName;
-    let backgroundColor = WeatherOptions[condition].color;
-    let weatherName = WeatherOptions[condition].weatherName;
+//로딩이 완료되면 출력되는 날씨 정보
+export default function Weather({temp, condition, city, speed, humidity, pressure, clouds}){ 
+    let icon = WeatherOptions[ condition].iconName; //날씨아이콘
+    let backgroundColor = WeatherOptions[ condition].color; //배경색
+    let weatherName = WeatherOptions[ condition].weatherName; //현재날씨
     return(
         <LinearGradient colors={backgroundColor} style={styles.container}>
             <StatusBar barStyle="light-content"/>
@@ -104,16 +106,31 @@ export default function Weather({temp, condition, city, speed, humidity, pressur
                     <Text style={styles.tile}>{weatherName}</Text>
                     <Text style={styles.tileinfo}>현재 날씨 {weatherName}, 기온은 {temp}° 입니다.</Text>
                 </View>
-                <Text style={styles.info}>풍속 : {speed}m/s</Text>
-                <Text style={styles.info}>습도 : {humidity}%</Text>
-                <Text style={styles.info}>기압 : {pressure}hPa</Text>
+                <View style={styles.weatherinfo}>
+                    <View style={styles.info}>
+                        <Text  style={styles.info_title}>습도</Text> 
+                        <Text  style={styles.info_info}>{humidity}%</Text> 
+                    </View>
+                    <View style={styles.info}>
+                        <Text  style={styles.info_title}>구름</Text> 
+                        <Text  style={styles.info_info}>{clouds}%</Text> 
+                    </View>
+                    <View style={styles.info}>
+                        <Text  style={styles.info_title}>풍속</Text> 
+                        <Text  style={styles.info_info}>{speed}m/s</Text> 
+                    </View>
+                    <View style={styles.info}>
+                        <Text  style={styles.info_title}>기압</Text> 
+                        <Text  style={styles.info_info}>{pressure}hPa</Text> 
+                    </View>
+                </View>
             </View>
         </LinearGradient>
     );
 }
 
+//지정한 날씨의 이름 이외의 값은 오류이다라고 타입 설정
 Weather.propTypes = {
-    temp: PropTypes.number.isRequired,
     condition: PropTypes.oneOf([
     "Thunderstorm",
     "Drizzle",
@@ -133,8 +150,8 @@ Weather.propTypes = {
     "Tornado"]).isRequired,
 }
 
-
-const styles = StyleSheet.create({
+//스타일링
+const styles = StyleSheet.create({ 
     container: {
         flex: 1,
         justifyContent:"center",
@@ -154,9 +171,9 @@ const styles = StyleSheet.create({
         alignItems:"center",
     },
     textcontainer:{
-    paddingLeft : 40,
-    paddingRight : 40,
-    alignItems : "flex-start" 
+        paddingLeft : 40,
+        paddingRight : 40,
+        alignItems : "flex-start" 
     },
     tile:{
         color:"white",
@@ -167,11 +184,22 @@ const styles = StyleSheet.create({
         color:"white",
         marginBottom:20,
     },
+    weatherinfo:{
+        flexWrap :"wrap",
+        flexDirection : "row"	
+    },
     info:{
+        width:"50%",
+        marginBottom:10,
+        alignItems:"flex-start",
+    },
+    info_title:{
+        color:"#eeeeee",
+    },
+    info_info:{
         color:"white",
         fontWeight:"600",
         fontSize:24,
         alignItems:"flex-start",
-        marginBottom:5,
     },
   });
